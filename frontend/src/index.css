@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  body {
+    @apply bg-bg-main text-text-main font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight text-white;
+  }
+}

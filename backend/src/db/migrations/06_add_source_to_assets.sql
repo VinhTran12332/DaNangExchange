@@ -1,0 +1,2 @@
+ALTER TABLE assets ADD COLUMN source_url TEXT;
+ALTER TABLE assets ADD COLUMN source_type TEXT DEFAULT 'DIRECT_LINK';

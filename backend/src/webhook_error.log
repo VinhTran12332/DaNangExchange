@@ -1,0 +1,8 @@
+[2026-01-28T08:43:20.795Z] Error: Error: SQLITE_CONSTRAINT: CHECK constraint failed: status IN ('CREATED', 'LOCKED', 'RELEASED', 'REFUNDED', 'CANCELLED')
+--> in Statement#run([ 'ffc88d2c-7628-4ca3-b096-72fe6c24989e' ], [Function: replacement])
+    at Database.<anonymous> (D:\Mastering RAG AI Engineer\Work_Anti\SanGiaoDich\node_modules\sqlite3\lib\sqlite3.js:76:19)
+    at Database.<anonymous> (D:\Mastering RAG AI Engineer\Work_Anti\SanGiaoDich\node_modules\sqlite3\lib\sqlite3.js:20:19)
+    at D:\Mastering RAG AI Engineer\Work_Anti\SanGiaoDich\backend\src\db\index.js:27:23
+    at new Promise (<anonymous>)
+    at Object.query (D:\Mastering RAG AI Engineer\Work_Anti\SanGiaoDich\backend\src\db\index.js:18:16)
+    at exports.handleWebhook (D:\Mastering RAG AI Engineer\Work_Anti\SanGiaoDich\backend\src\features\payment\payment.controller.js:33:22)

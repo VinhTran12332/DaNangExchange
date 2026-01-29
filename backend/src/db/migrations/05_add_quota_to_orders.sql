@@ -1,0 +1,1 @@
+ALTER TABLE orders ADD COLUMN purchased_quota INTEGER DEFAULT 1;
