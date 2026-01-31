@@ -1,192 +1,110 @@
 {
-  "meta": {
-    "schema_version": "1.1.0",
-    "awf_version": "3.3.0"
-  },
-  "project": {
-    "name": "Unified Global Data Exchange Standard (UGDES) - Enterprise",
-    "type": "Data Exchange Platform (National Standard)",
-    "status": "Enterprise Pivot Implementation (Phase 5 Complete, Phase 6 Planning)",
-    "description": "A permissioned data trading platform using Hyperledger Fabric and Fiat Payment integration."
-  },
-  "tech_stack": {
-    "frontend": {
-      "name": "Web App",
-      "framework": "React (Vite)",
-      "ui_lib": "TailwindCSS (Fintech Theme)",
-      "icons": "Lucide React"
+    "meta": {
+        "schema_version": "1.1.0",
+        "awf_version": "3.3.0"
     },
-    "backend": {
-      "architecture": "Microservices Ready",
-      "languages": [
-        "Node.js"
-      ],
-      "libraries": [
-        "Express",
-        "Hyperledger Fabric SDK (Mock Adapter)",
-        "Crypto",
-        "XLSX (Implemented)",
-        "axios (Source Fetching)"
-      ],
-      "containerization": "Docker (Planned)"
+    "project": {
+        "name": "SanGiaoDich Du Lieu (Data Marketplace)",
+        "type": "Data Marketplace / Fintech",
+        "status": "Pivot to Enterprise MVP"
     },
-    "database": {
-      "type": "Relational",
-      "technique": "SQLite (Dev) / Postgres (Prod)",
-      "orm": "Raw SQL"
+    "tech_stack": {
+        "frontend": {
+            "framework": "React (Vite)",
+            "styling": "Tailwind CSS",
+            "icons": "Lucide React"
+        },
+        "backend": {
+            "runtime": "Node.js",
+            "framework": "Express",
+            "database": "SQLite (ugdes.db)",
+            "blockchain_mock": "Hyperledger Fabric Adapter (Custom SQLite implementation)"
+        },
+        "authentication": "JWT"
     },
-    "blockchain": {
-      "role": "Trust Layer (Audit Trail)",
-      "framework": "Hyperledger Fabric (Mock Adapter for MVP)",
-      "network": "Viettel Enterprise Blockchain (Planned)"
-    }
-  },
-  "database_schema": {
-    "summary": "Core tables for Identity, Catalog, Transactions, and Ledger.",
-    "tables": [
-      {
-        "name": "users",
-        "columns": [
-          "id",
-          "email",
-          "role",
-          "kyc_status",
-          "password_hash"
+    "database_schema": {
+        "summary": "Stores users, data assets, orders, and a tamper-proof ledger of transactions.",
+        "tables": [
+            {
+                "name": "ledger_transactions",
+                "columns": [
+                    "id",
+                    "order_id",
+                    "buyer_id",
+                    "action_type",
+                    "payload",
+                    "block_number",
+                    "timestamp"
+                ],
+                "description": "Immutable log of data transactions, simulating a blockchain ledger."
+            },
+            {
+                "name": "users",
+                "description": "Standard user management with role-based access."
+            },
+            {
+                "name": "orders",
+                "description": "Tracks data purchase requests and status."
+            },
+            {
+                "name": "assets",
+                "description": "Catalog of data products available for sale."
+            }
         ]
-      },
-      {
-        "name": "assets",
-        "columns": [
-          "id",
-          "seller_id",
-          "title",
-          "price",
-          "metadata",
-          "status",
-          "source_url",
-          "file_type"
-        ]
-      },
-      {
-        "name": "orders",
-        "columns": [
-          "id",
-          "buyer_id",
-          "asset_id",
-          "amount",
-          "status",
-          "tx_hash",
-          "purchased_quota",
-          "created_at"
-        ]
-      },
-      {
-        "name": "ledger_transactions",
-        "columns": [
-          "tx_id",
-          "order_id",
-          "action",
-          "payload",
-          "block_number",
-          "timestamp"
-        ]
-      },
-      {
-        "name": "access_tokens",
-        "columns": [
-          "token",
-          "order_id",
-          "remaining_quota",
-          "created_at"
-        ]
-      }
-    ]
-  },
-  "api_endpoints": [
-    {
-      "path": "/api/auth/login-mock",
-      "method": "POST",
-      "explained": "Mock VNeID login."
     },
-    {
-      "path": "/api/assets",
-      "method": "GET/POST",
-      "explained": "Catalog Management (Supports Source URL)"
-    },
-    {
-      "path": "/api/orders",
-      "method": "POST",
-      "explained": "Create Order & Lock Asset on Ledger (Supports Dynamic Quantity)"
-    },
-    {
-      "path": "/api/payment/webhook",
-      "method": "POST",
-      "explained": "Simulate Banking Webhook -> Generates API Key"
-    },
-    {
-      "path": "/api/hyperledger/blocks/latest",
-      "method": "GET",
-      "explained": "Fetch latest blocks from Mock Ledger"
-    },
-    {
-      "path": "/api/access/data/:assetId",
-      "method": "GET",
-      "explained": "Download Data (with Quota deduction & Dynamic Watermarking)"
-    },
-    {
-      "path": "/api/seller/check-source",
-      "method": "POST",
-      "explained": "Validate and preview external data source (e.g., Google Drive)"
-    }
-  ],
-  "features": [
-    {
-      "name": "Catalog & Ordering",
-      "status": "Implemented",
-      "description": "Full flow with SQLite."
-    },
-    {
-      "name": "Trust Layer (Hyperledger)",
-      "status": "Mock Adapter Implemented",
-      "description": "Simulates Chaincode interactions & Ledger persistence."
-    },
-    {
-      "name": "Payment Gateway",
-      "status": "Simulation Implemented",
-      "description": "Fiat Transfer Simulation."
-    },
-    {
-      "name": "Usage Rights",
-      "status": "Implemented",
-      "description": "API Key, Quota Management, Dynamic Pricing."
-    },
-    {
-      "name": "Data Watermarking",
-      "status": "Implemented",
-      "description": "Proxy Streaming (JSON) & In-Memory Excel Watermarking (XLSX). Includes Fallback Identity."
-    },
-    {
-      "name": "Seller Integration",
-      "status": "Implemented",
-      "description": "Google Drive Data Fetching, Source Validation, Broker Model."
-    }
-  ],
-  "knowledge_items": {
-    "patterns": [
-      "Adapter Pattern (Blockchain Agnostic)",
-      "Webhook Simulation",
-      "Quota Management",
-      "Proxy Streaming (Zero Storage)",
-      "Fallback Identity (Resilience)",
-      "Stream Fetching (Google Drive)"
+    "api_endpoints": [
+        {
+            "path": "/api/hyperledger/history/:orderId",
+            "method": "GET",
+            "explained": "Retrieves the audit trail (transaction history) for a specific order from the immutable ledger."
+        },
+        {
+            "path": "/api/hyperledger/blocks/latest",
+            "method": "GET",
+            "explained": "Fetches the latest block simulations for the explorer view."
+        },
+        {
+            "path": "/api/auth/*",
+            "description": "User authentication endpoints."
+        },
+        {
+            "path": "/api/assets/*",
+            "description": "Data catalog management."
+        },
+        {
+            "path": "/api/orders/*",
+            "description": "Order processing and management."
+        },
+        {
+            "path": "/api/payment/*",
+            "description": "Payment simulation and verification."
+        }
     ],
-    "decisions": [
-      "Pivot: Public Chain -> Permissioned Chain (Hyperledger).",
-      "Pivot: Crypto -> Fiat Payment.",
-      "Security: Use Watermarking instead of DRM.",
-      "Architecture: Broker Model (No Data Storage on Platform).",
-      "Resilience: Use Fallback Identity when DB sync lags.",
-      "Integration: Direct Google Drive Stream Fetching."
-    ]
-  }
+    "features": [
+        {
+            "name": "Hyperledger Mock Adapter",
+            "status": "In Progress",
+            "description": "Simulates Fabric consensus and storage using SQLite to enable Enterprise logic without heavy infrastructure."
+        },
+        {
+            "name": "Data Watermarking",
+            "status": "Planned",
+            "description": "Inject buyer identity into purchased data to prevent leakage."
+        },
+        {
+            "name": "Payment Simulation",
+            "status": "Planned",
+            "description": "Simulates bank transfers to manage user quotas."
+        }
+    ],
+    "knowledge_items": {
+        "patterns": [
+            "Service Layer Architecture",
+            "Mock Adapter Pattern for Blockchain"
+        ],
+        "conventions": [
+            "Security First (ACID, Sanitization)",
+            "No Ethereum/Ethers.js dependencies"
+        ]
+    }
 }

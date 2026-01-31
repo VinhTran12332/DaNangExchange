@@ -30,7 +30,7 @@ Goal: Shift from Public Marketplace to Private Enterprise Data Exchange.
 - [x] **Phase 02: Product Detail & Checkout** (Detail View, Cart, Payment Flow)
 - [x] **Phase 03: User Dashboard** (Buyer/Seller Views, mock data)
 - [x] **Phase 04: Mock Data Realism** (Seed scripts, realistic content)
-- [ ] **Phase 05: Deployment** (Vercel setup)
+- [/] **Phase 05: Deployment** (Vercel setup)
 
 ---
 ## 🕰️ Legacy Phases (Initial Idea)

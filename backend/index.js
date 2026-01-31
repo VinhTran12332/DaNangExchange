@@ -45,7 +45,20 @@ app.get('/', (req, res) => {
     res.json({ message: 'UGDES API Gateway v1.0' });
 });
 
+const initDatabase = require('./src/db/init_db');
+
 // Start Server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await initDatabase(); // Initialize SQLite Schema
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+};
+
+startServer();

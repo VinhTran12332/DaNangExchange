@@ -1,40 +1,44 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
-// Connect to SQLite file (creates it if not exists)
-const dbPath = path.resolve(__dirname, '../../ugdes.db');
+// Vercel /tmp or Local
+const isVercel = process.env.VERCEL || false;
+const dbName = 'ugdes.db';
+let dbPath;
+
+if (isVercel) {
+    dbPath = path.join('/tmp', dbName);
+    console.log('[DB] Running on VERCEL. Using ephemeral path:', dbPath);
+    // On Vercel, we might need to copy a pre-seeded DB if we wanted persistence simulation
+    // But for now, we just let it create a fresh one.
+} else {
+    // Local development
+    dbPath = path.resolve(__dirname, '../../ugdes.db');
+    console.log('[DB] Running Locally. Using persistent path:', dbPath);
+}
+
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
-        console.error('Could not connect to database', err);
+        console.error('[DB] Connection Error:', err.message);
     } else {
-        console.log('Connected to SQLite database');
+        console.log('[DB] Connected to SQLite database.');
     }
 });
 
-// Helper to wrap sqlite run/all in Promises to mimic PG style slightly
 module.exports = {
-    // Safe wrapper for query based operations
     query: (text, params = []) => {
         return new Promise((resolve, reject) => {
-            // Very basic normalization: SQLite uses ? for params, PG uses $1, $2
-            // We need to assume the caller sends valid SQLite queries or we handle conversion
-            // For this POC, let's assume we write queries compatible with the driver we use.
-            // If we used a query builder like Knex this would be easier, but for now we stick to raw.
-
-            // Simple logic: if query starts with SELECT, use 'all', else use 'run'
             const method = text.trim().toUpperCase().startsWith('SELECT') ? 'all' : 'run';
-
             db[method](text, params, function (err, rows) {
                 if (err) {
-                    console.error("Query Error:", err);
+                    console.error('[DB] Query Error:', err.message);
                     return reject(err);
                 }
-                // Mimic PG 'rows' structure
                 if (method === 'run') {
-                    // 'this' contains changes, lastID etc.
                     resolve({ rows: [], rowCount: this.changes, lastID: this.lastID });
                 } else {
-                    resolve({ rows: rows, rowCount: rows.length });
+                    resolve({ rows: rows, rowCount: rows ? rows.length : 0 });
                 }
             });
         });
