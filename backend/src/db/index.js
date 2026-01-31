@@ -1,6 +1,14 @@
 const path = require('path');
 const fs = require('fs');
 
+// VERCEL DEBUG MODE: FORCE MEMORY ADAPTER
+// We are removing sqlite3 logic entirely to prevent build/runtime crashes.
+const MemoryAdapter = require('./memory_adapter');
+const dbInstance = MemoryAdapter;
+const isMock = true;
+
+// Original SQLite logic commented out for debugging
+/*
 let dbInstance;
 let isMock = false;
 
@@ -38,12 +46,12 @@ const loadDatabase = () => {
 };
 
 loadDatabase();
+*/
+
+console.log('[DB] FORCE-MODE: Using In-Memory Adapter.');
 
 module.exports = {
     query: (text, params = []) => {
-        if (isMock) {
-            return dbInstance.query(text, params);
-        }
 
         return new Promise((resolve, reject) => {
             const method = text.trim().toUpperCase().startsWith('SELECT') ? 'all' : 'run';

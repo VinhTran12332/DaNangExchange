@@ -45,6 +45,10 @@ app.get('/', (req, res) => {
     res.json({ message: 'UGDES API Gateway v1.0' });
 });
 
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'OK', mode: 'Serverless', db: 'InMemory' });
+});
+
 const initDatabase = require('./src/db/init_db');
 
 // Start Server or Export for Vercel
