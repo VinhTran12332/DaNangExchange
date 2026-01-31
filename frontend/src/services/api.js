@@ -1,7 +1,8 @@
 // On Vercel, we use relative paths so the Rewrite rules can handle the routing to backend.
 // Locally, we might use localhost:3000 if running separate servers, 
 // but sticking to /api helps if we use a proxy.
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// FORCE FIX: Hardcode to /api to bypass any phantom env vars
+export const API_BASE_URL = '/api';
 
 export const fetchAssets = async () => {
     try {
