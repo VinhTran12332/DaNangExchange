@@ -47,18 +47,27 @@ app.get('/', (req, res) => {
 
 const initDatabase = require('./src/db/init_db');
 
-// Start Server
-const startServer = async () => {
-    try {
-        await initDatabase(); // Initialize SQLite Schema
+// Start Server or Export for Vercel
+if (process.env.VERCEL) {
+    // Vercel Serverless Mode
+    // We assume initDatabase might need to run on every cold start request or be optimized.
+    // Ideally, initDB should be idempotent.
+    initDatabase().catch(err => console.error("Vercel DB Init Failed:", err));
+    module.exports = app;
+} else {
+    // Local Mode
+    const startServer = async () => {
+        try {
+            await initDatabase(); // Initialize SQLite Schema
 
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Failed to start server:', error);
-        process.exit(1);
-    }
-};
+            app.listen(PORT, () => {
+                console.log(`Server running on port ${PORT}`);
+            });
+        } catch (error) {
+            console.error('Failed to start server:', error);
+            process.exit(1);
+        }
+    };
 
-startServer();
+    startServer();
+}
